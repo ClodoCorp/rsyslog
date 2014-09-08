@@ -17,7 +17,15 @@
 # limitations under the License.
 #
 
-package 'rsyslog'
+package 'rsyslog' do
+  if node['rsyslog']['version']
+    version node['rsyslog']['version']
+    options "--force-yes"
+    action :install
+  else
+    action :upgrade
+  end
+end
 package 'rsyslog-relp' if node['rsyslog']['use_relp']
 
 if node['rsyslog']['enable_tls'] && node['rsyslog']['tls_ca_file']
